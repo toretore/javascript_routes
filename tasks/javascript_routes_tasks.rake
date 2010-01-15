@@ -1,4 +1,3 @@
-require File.join(RAILS_ROOT, 'config', 'environment')
 require File.join(File.dirname(__FILE__), '..', 'lib', 'javascript_routes')
 require File.join(File.dirname(__FILE__), '..', 'bin', 'jsmin')
 
@@ -6,7 +5,7 @@ namespace :routes do
   namespace :js do
   
     desc 'Generate routes.js based on routes defined in routes.rb'
-    task :generate do
+    task :generate => :environment do
       ActionController::Routing::Routes.load!
       JavascriptRoutes.generate(:lite => ENV['lite'], :pack => ENV['pack'] != 'false')
       puts "Generated #{JavascriptRoutes::FILENAME}"
@@ -14,7 +13,7 @@ namespace :routes do
     end
     
     desc 'Minify the routes.js base file'
-    task :minify do
+    task :minify => :environment do
       infile = JavascriptRoutes::JS
       outfile = JavascriptRoutes::JS_PACKED
       
